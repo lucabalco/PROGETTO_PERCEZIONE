@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from ucimlrepo import fetch_ucirepo
 
-# --- 1. Ricaricamento e Trasformazione del Dataset ---
+# Fetch Dataset
 estimation_of_obesity_levels_based_on_eating_habits_and_physical_condition = fetch_ucirepo(id=544)
 X = estimation_of_obesity_levels_based_on_eating_habits_and_physical_condition.data.features
 
@@ -14,11 +14,9 @@ dati_selezionati = X[colonne_richieste].copy()
 # Arrotondamento e Limitazione
 dati_selezionati = np.ceil(dati_selezionati - 0.5).astype(int)
 dati_selezionati = dati_selezionati.clip(upper=4)
-
-# --- 2. Preparazione Variabili e Mappature XTicks ---
 sns.set_style("white") 
 
-# Dizionario che contiene i dettagli per ogni grafico (come fornito dall'utente)
+# Dizionario che contiene i dettagli per ogni grafico
 plot_details = {
     'FCVC': {
         'title': 'Frequenza Consumo di Vegetali', 
@@ -42,13 +40,9 @@ plot_details = {
     }
 }
 
-
-# --- 3. Generazione di Istogrammi Separati con Nuova Larghezza delle Barre ---
-for i, (col, details) in enumerate(plot_details.items()):
-    
+# Generazione degli istogrammi  
+for i, (col, details) in enumerate(plot_details.items()):    
     plt.figure(figsize=(5, 5))
-    
-    # Generazione dell'Istogramma con SHRINK
     sns.histplot(
         data=dati_selezionati,
         x=col,
@@ -57,24 +51,20 @@ for i, (col, details) in enumerate(plot_details.items()):
         color="#12B22D" , 
         shrink=0.5 
     )
-    
-    # Styling
+    #Styling
     plt.title(f"{details['title']}", fontsize=14)
     plt.ylabel('')
-        
+    
     ax = plt.gca()
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_visible(False)
     
-    # Applicazione degli XTICKS PERSONALIZZATI
     tick_positions = list(details['labels'].keys())
     tick_labels = list(details['labels'].values())
     
     plt.xticks(tick_positions, tick_labels, ha='center', fontsize=10)
     plt.xlabel('')
-    
-    # Mostra il grafico singolarmente
     plt.tight_layout()
 
     plt.show()
