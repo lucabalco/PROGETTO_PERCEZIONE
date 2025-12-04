@@ -76,4 +76,5 @@ for i, (col, details) in enumerate(plot_details.items()):
     
     # Mostra il grafico singolarmente
     plt.tight_layout()
+
     plt.show()
