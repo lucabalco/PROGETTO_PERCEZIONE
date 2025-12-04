@@ -47,3 +47,4 @@ ax.legend(title="Categoria", bbox_to_anchor=(1.05, 1), loc='upper left')
 
 plt.tight_layout()
 plt.show()
+
