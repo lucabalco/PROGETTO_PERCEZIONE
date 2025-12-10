@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from ucimlrepo import fetch_ucirepo
+import os # Importa il modulo 'os' per gestire le cartelle
 
 # Fetch Dataset
 estimation_of_obesity_levels_based_on_eating_habits_and_physical_condition = fetch_ucirepo(id=544)
@@ -39,20 +40,27 @@ plot_details = {
     }
 }
  
-for i, (col, details) in enumerate(plot_details.items()):    
-    plt.figure(figsize=(5, 5))
+for i, (col, details) in enumerate(plot_details.items()):     
+    if col == "FAF" : 
+        plt.figure(figsize=(8, 5), facecolor="#ffe7c2")
+    elif col =="FCVC":
+        plt.figure(figsize=(6, 5), facecolor="#ffe7c2")
+    else:
+        plt.figure(figsize=(5, 5), facecolor="#ffe7c2")
     sns.histplot(
         data=dati_selezionati,
         x=col,
         bins=np.arange(0.5, 5.5, 1),
         discrete=True,
-        color="#12B22D" , 
-        shrink=0.5 
+        color="#9C2007" , 
+        shrink=0.5,
+        edgecolor="#9C2007"
     )
-    plt.title(f"{details['title']}", fontsize=14, y = 1.1)
+    plt.title(f"{details['title']}", fontsize=24,fontname="Prata", y = 1.1, color="#9C2007",weight= "bold")
     plt.ylabel('')
     
     ax = plt.gca()
+    ax.set_facecolor("#ffe7c2")
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_visible(False)
@@ -63,7 +71,7 @@ for i, (col, details) in enumerate(plot_details.items()):
     tick_positions = list(details['labels'].keys())
     tick_labels = list(details['labels'].values())
     
-    plt.xticks(tick_positions, tick_labels, ha='center', fontsize=10)
+    plt.xticks(tick_positions, tick_labels, ha='center',fontname="Prata", fontsize=15, color="#9C2007")
     plt.xlabel('')
     plt.tight_layout()
     
@@ -71,11 +79,18 @@ for i, (col, details) in enumerate(plot_details.items()):
         ax.annotate(f'{p.get_height()}', 
                     (p.get_x() + p.get_width() / 2., p.get_height()), 
                     ha='center', va='center', 
-                    xytext=(0, 9), 
+                    xytext=(0, 16), 
                     textcoords='offset points', 
-                    fontsize=10)
+                    fontsize=24,
+                    color="#FF914D",
+                    fontname="Prata",
+                    fontweight="bold",
+                    )
 
+    nome_file = os.path.join("C:/Users/roma0/Desktop/UNI/Anno_3/Percezione/feature_continue", f'{col}_Categorica.png')
+    plt.savefig(nome_file, facecolor=plt.gcf().get_facecolor(), edgecolor='none')
     plt.show()
+
 
 # =========== DATI CATEGORICHE =============
 
@@ -102,10 +117,9 @@ plot_details_cat = {
 
 sns.set_style("white") 
 
-
+# --- CICLO 2: DATI CATEGORICI ---
 for col, details in plot_details_cat.items():
     
-
     dati_cat[f'{col}_Codes'] = pd.Categorical(
         dati_cat[col], 
         categories=details['data_labels_en'], 
@@ -114,18 +128,24 @@ for col, details in plot_details_cat.items():
     
     tick_positions = np.arange(len(details['tick_labels_it']))
     
-    plt.figure(figsize=(5, 5)) 
-    
+    if col == "MTRANS" : 
+        plt.figure(figsize=(9, 6), facecolor="#ffe7c2")
+    elif col == "CALC" :
+        plt.figure(figsize=(8, 5), facecolor="#ffe7c2")
+    else:
+        plt.figure(figsize=(5, 5), facecolor="#ffe7c2")
+        
     ax = sns.histplot(
         data=dati_cat,
         x=f'{col}_Codes',
         stat='count',
         discrete=True,
-        color="#12B22D", 
-        shrink=0.7 
+        color="#9C2007", 
+        shrink=0.7,
+        edgecolor= "#9C2007"
     )
     
-    plt.title(f"{details['title_it']}", fontsize=14, y = 1.1)
+    plt.title(f"{details['title_it']}", fontsize=24, fontname='Prata', y = 1.1, color="#9C2007",weight = "bold")
     plt.ylabel('')
     
     
@@ -134,10 +154,12 @@ for col, details in plot_details_cat.items():
         details['tick_labels_it'], 
         rotation=0, 
         ha='center', 
-        fontsize=10
+        fontsize=15,
+        fontname="Prata", 
+        color="#9C2007",
     ) 
     plt.xlabel('')
-    
+    ax.set_facecolor("#ffe7c2")
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_visible(False)
@@ -151,9 +173,16 @@ for col, details in plot_details_cat.items():
             ax.annotate(f'{int(height)}', 
                         (p.get_x() + p.get_width() / 2., height), 
                         ha='center', va='center', 
-                        xytext=(0, 9), 
+                        xytext=(0, 16), 
                         textcoords='offset points', 
-                        fontsize=10)
+                        fontsize=24,
+                        fontname="Prata", 
+                        color="#FF914D",
+                        fontweight="bold",
+                        )
     
     plt.tight_layout()
+    
+    nome_file = os.path.join("C:/Users/roma0/Desktop/UNI/Anno_3/Percezione/feature_continue", f'{col}_Categorica.png')
+    plt.savefig(nome_file, facecolor=plt.gcf().get_facecolor(), edgecolor='none')
     plt.show()
